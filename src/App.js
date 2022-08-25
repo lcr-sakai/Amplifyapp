@@ -7,6 +7,12 @@ import { API, Storage } from 'aws-amplify';
 import { listNotes } from './graphql/queries';
 import { createNote as createNoteMutation, deleteNote as deleteNoteMutation } from './graphql/mutations';
 
+import { I18n } from 'aws-amplify';
+import { translations } from '@aws-amplify/ui-react';
+
+I18n.putVocabularies(translations);
+I18n.setLanguage('ja');
+
 const initialFormState = { name: '', description: '' }
 
 function App({ signOut, user }) {
