@@ -6,14 +6,13 @@ import '@aws-amplify/ui-react/styles.css';
 import { API, Storage } from 'aws-amplify';
 import { listNotes } from './graphql/queries';
 import { createNote as createNoteMutation, deleteNote as deleteNoteMutation } from './graphql/mutations';
-
 import { I18n } from 'aws-amplify';
 import { translations } from '@aws-amplify/ui-react';
 
 I18n.putVocabularies(translations);
 I18n.setLanguage('ja');
 
-const initialFormState = { name: '', description: '' }
+const initialFormState = { name: '', description: '', password: '', memo: '' }
 
 function App({ signOut, user }) {
   const [notes, setNotes] = useState([]);
@@ -45,7 +44,7 @@ function App({ signOut, user }) {
   }
 
   async function createNote() {
-    if (!formData.name || !formData.description) return;
+    if (!formData.name || !formData.description || !formData.password || !formData.memo) return;
     await API.graphql({ query: createNoteMutation, variables: { input: formData } });
     if (formData.image) {
       const image = await Storage.get(formData.image);
@@ -75,6 +74,16 @@ function App({ signOut, user }) {
         value={formData.description}
       />
       <input
+        onChange={e => setFormData({ ...formData, 'password': e.target.value})}
+        placeholder="Note password"
+        value={formData.password}
+      />
+      <input
+        onChange={e => setFormData({ ...formData, 'memo': e.target.value})}
+        placeholder="Note memo"
+        value={formData.memo}
+      />
+      <input
         type="file"
         onChange={onChange}
       />
@@ -85,6 +94,8 @@ function App({ signOut, user }) {
             <div key={note.id || note.name}>
               <h2>{note.name}</h2>
               <p>{note.description}</p>
+              <p>{note.password}</p>
+              <p>{note.memo}</p>
               <button onClick={() => deleteNote(note)}>Delete note</button>
               {
                 note.image && <img src={note.image} style={{width: 400}} />
