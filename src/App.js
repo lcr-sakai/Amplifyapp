@@ -8,6 +8,8 @@ import { listNotes } from './graphql/queries';
 import { createNote as createNoteMutation, deleteNote as deleteNoteMutation } from './graphql/mutations';
 import { I18n } from 'aws-amplify';
 import { translations } from '@aws-amplify/ui-react';
+import Moment from 'react-moment';
+// import DeleteIcon from '@mui/icons-material/Delete';
 
 I18n.putVocabularies(translations);
 I18n.setLanguage('ja');
@@ -100,6 +102,8 @@ function App({ signOut, user }) {
               {
                 note.image && <img src={note.image} style={{width: 400}} />
               }
+              <p>作成日時：<Moment format="YYYY/MM/DD HH:mm">{note.createdAt}</Moment></p>
+              <p>更新日時：<Moment format="YYYY/MM/DD HH:mm">{note.updatedAt}</Moment></p>
             </div>
           ))
         }

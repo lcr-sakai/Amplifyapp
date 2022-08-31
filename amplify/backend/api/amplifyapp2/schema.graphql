@@ -9,4 +9,6 @@ type Note @model {
   image: String
   password: String
   memo: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
 }
